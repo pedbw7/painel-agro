@@ -8,8 +8,8 @@
 <style>
 body{
     margin:0;
-    background:linear-gradient(180deg,#0c1f14,#123524);
     font-family:Arial, sans-serif;
+    background:linear-gradient(180deg,#0c1f14,#123524);
     color:white;
     text-align:center;
 }
@@ -29,11 +29,11 @@ h1{
 
 .card{
     width:85%;
-    max-width:400px;
+    max-width:420px;
     background:#1c4d32;
     padding:25px;
     border-radius:20px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 .titulo{
@@ -72,12 +72,12 @@ h1{
 </div>
 
 <div class="card">
-<div class="titulo">Soja</div>
+<div class="titulo">Soja (referência internacional)</div>
 <div id="soja" class="valor">Indisponível</div>
 </div>
 
 <div class="card">
-<div class="titulo">Milho</div>
+<div class="titulo">Milho (referência internacional)</div>
 <div id="milho" class="valor">Indisponível</div>
 </div>
 
@@ -86,29 +86,29 @@ h1{
 </div>
 
 <script>
-
 async function atualizar(){
     try{
-        const moedas = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL");
-        const dados = await moedas.json();
+        const resposta = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL");
+        const dados = await resposta.json();
 
-        document.getElementById("dolar").innerText = "R$ " + parseFloat(dados.USDBRL.bid).toFixed(2);
-        document.getElementById("euro").innerText = "R$ " + parseFloat(dados.EURBRL.bid).toFixed(2);
+        document.getElementById("dolar").innerText =
+        "R$ " + parseFloat(dados.USDBRL.bid).toFixed(2);
+
+        document.getElementById("euro").innerText =
+        "R$ " + parseFloat(dados.EURBRL.bid).toFixed(2);
 
         const agora = new Date();
         document.getElementById("hora").innerText =
         "Última atualização: " + agora.toLocaleTimeString();
 
     }catch(e){
-        console.log("Erro");
+        console.log("Erro ao buscar dados");
     }
 }
 
 atualizar();
 setInterval(atualizar,60000);
-
 </script>
 
 </body>
 </html>
-<!-- atualização -->
