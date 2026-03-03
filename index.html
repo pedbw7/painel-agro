@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Agro</title>
+
+<style>
+body{
+    margin:0;
+    background:#0f2e1d;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+}
+
+h1{
+    margin-top:20px;
+    font-size:28px;
+}
+
+.container{
+    margin-top:30px;
+}
+
+.card{
+    background:#184d2f;
+    margin:20px auto;
+    padding:25px;
+    width:80%;
+    border-radius:15px;
+}
+
+.valor{
+    font-size:40px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.atualizacao{
+    margin-top:20px;
+    font-size:14px;
+    opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌾 Painel Agro</h1>
+
+<div class="container">
+
+<div class="card">
+    <div>Dólar</div>
+    <div id="dolar" class="valor">Carregando...</div>
+</div>
+
+<div class="card">
+    <div>Euro</div>
+    <div id="euro" class="valor">Carregando...</div>
+</div>
+
+<div class="card">
+    <div>Soja (CBOT)</div>
+    <div id="soja" class="valor">Carregando...</div>
+</div>
+
+<div class="card">
+    <div>Milho (CBOT)</div>
+    <div id="milho" class="valor">Carregando...</div>
+</div>
+
+<div class="atualizacao" id="hora"></div>
+
+</div>
+
+<script>
+
+async function atualizar(){
+    try{
+        const moedas = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL");
+        const moedasDados = await moedas.json();
+
+        document.getElementById("dolar").innerText = "R$ " + parseFloat(moedasDados.USDBRL.bid).toFixed(2);
+        document.getElementById("euro").innerText = "R$ " + parseFloat(moedasDados.EURBRL.bid).toFixed(2);
+
+        const soja = await fetch("https://economia.awesomeapi.com.br/json/last/SOYB-US");
+        const sojaDados = await soja.json();
+        document.getElementById("soja").innerText = "$ " + parseFloat(sojaDados.SOYBUS.bid).toFixed(2);
+
+        const milho = await fetch("https://economia.awesomeapi.com.br/json/last/CORN-US");
+        const milhoDados = await milho.json();
+        document.getElementById("milho").innerText = "$ " + parseFloat(milhoDados.CORNUS.bid).toFixed(2);
+
+        const agora = new Date();
+        document.getElementById("hora").innerText =
+            "Última atualização: " + agora.toLocaleTimeString();
+
+    }catch(error){
+        console.log("Erro ao atualizar dados");
+    }
+}
+
+atualizar();
+setInterval(atualizar, 60000);
+
+</script>
+
+</body>
+</html>
